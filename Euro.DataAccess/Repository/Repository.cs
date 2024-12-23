@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Euro.DataAccess.Data;
 using Euro.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +12,13 @@ namespace Euro.DataAccess.Repository
     {
         private readonly ApplicationDbContext _db;
         internal DbSet<T> dbSet;
+
         public Repository(ApplicationDbContext db)
         {
             _db = db;
             this.dbSet = _db.Set<T>();
-            _db.Products.Include(u => u.Category).Include(u=>u.CategoryId);
         }
+
         public void Add(T entity)
         {
             dbSet.Add(entity);
@@ -28,28 +27,37 @@ namespace Euro.DataAccess.Repository
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+
+            // Filtruj dane
             query = query.Where(filter);
-            if (string.IsNullOrEmpty(includeProperties))
+
+            // Dodaj właściwości nawigacyjne, jeśli istnieją
+            if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);
                 }
             }
+
+            // Pobierz pierwszy wynik lub zwróć null
             return query.FirstOrDefault();
         }
 
-        //Category, CoverType
         public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+
+            // Dodaj właściwości nawigacyjne, jeśli istnieją
             if (!string.IsNullOrEmpty(includeProperties))
             {
-                foreach(var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);
                 }
             }
+
+            // Pobierz wszystkie wyniki jako lista
             return query.ToList();
         }
 

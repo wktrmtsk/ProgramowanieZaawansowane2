@@ -21,6 +21,7 @@ namespace EuroMoto.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
+            
             return View(objProductList);
         }
         public IActionResult Upsert(int? id)
@@ -126,5 +127,16 @@ namespace EuroMoto.Areas.Admin.Controllers
             return RedirectToAction("Index");
 
         }
+
+        #region API CALLS
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+            return Json(new {data = objProductList});
+        }
+
+        #endregion
     }
 }
