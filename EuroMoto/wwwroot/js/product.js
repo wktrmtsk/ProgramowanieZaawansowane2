@@ -1,4 +1,4 @@
-﻿
+﻿var dataTable;
 
 $(document).ready(function () {
     loadDataTable();
@@ -45,6 +45,7 @@ function loadDataTable() {
                     url: url,
                     type: 'DELETE',
                     success: function (data) {
+                        dataTable.ajax.reload();
                         toastr.success(data.message);
                     }
                 })
