@@ -9,10 +9,10 @@ namespace Euro.Utility
 {
     public static class SD
     {
-        public const string Role_Customer = "Customer";
-        public const string Role_Company = "Company";
-        public const string Role_Admin = "Admin";
-        public const string Role_Employee = "Employee";
+        public const string Role_Customer = "Klient indywidualny";
+        public const string Role_Company = "Klient firmowy";
+        public const string Role_Admin = "Administrator";
+        public const string Role_Employee = "Pracownik";
 
     }
 }
